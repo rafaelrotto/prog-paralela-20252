@@ -13,3 +13,4 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 */
 
 Route::apiResource('/users', UserController::class);
+Route::get('/users/export/csv', [UserController::class, 'exportCsv']);

@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct(private readonly UserService $userService)
+    {}
+
     /**
      * Display a listing of the resource.
      */
@@ -53,5 +57,12 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportCsv(Request $request)
+    {
+        $response = $this->userService->exportCsv($request->all());
+
+        return response()->json(['url' => $response['url']], $response['status']);
     }
 }

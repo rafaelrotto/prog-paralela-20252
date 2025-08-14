@@ -1,8 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Jobs\TesteFila;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/teste-fila', function () {
+    TesteFila::dispatch();
+    return 'Job enviado para a fila!';
+});
 
 /*
 Route::post('/users', [UserController::class, 'store']);

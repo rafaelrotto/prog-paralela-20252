@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\UserRepository;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Services\UserService;
 use App\Models\User;
@@ -11,8 +12,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function __construct(private readonly UserService $userService)
-    {}
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly UserRepository $userRepository
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -27,7 +30,7 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request): JsonResponse
     {
-        $user = User::create($request->validated());
+        $user = $this->userRepository->store($request->validated());
 
         return response()->json([
             'message' => 'Usuário criado com sucesso.',
@@ -63,6 +66,6 @@ class UserController extends Controller
     {
         $response = $this->userService->exportCsv($request->all());
 
-        return response()->json(['url' => $response['url']], $response['status']);
+        return response()->json(['message' => $response['message']], $response['status']);
     }
 }

@@ -1,61 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📌 Guia de Instalação e Configuração da Aplicação
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## ✅ Pré-requisitos
+Antes de iniciar a instalação, verifique se você possui os seguintes requisitos:
 
-## About Laravel
+- [PHP 8.2+](https://www.php.net/downloads)  
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)  
+- [Composer](https://getcomposer.org/)  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🖥️ Instalação no Windows
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. Docker Desktop  
+Baixe e instale o Docker Desktop através do link:  
+[Download Docker Desktop](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-win-amd64&_gl=1*q2ey8e*_ga*MTc1MzE5NTEyNC4xNzU1NDYwMDE3*_ga_XJWPQMJYHQ*czE3NTU0NjAwMTckbzEkZzEkdDE3NTU0NjAwMTkkajU4JGwwJGgw)
 
-## Learning Laravel
+### 2. PHP (XAMPP)  
+Baixe e instale o PHP através do XAMPP:  
+[Download PHP (XAMPP 8.2.12)](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.12/xampp-windows-x64-8.2.12-0-VS16-installer.exe)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 3. Composer  
+Baixe e instale o Composer:  
+[Download Composer](https://getcomposer.org/Composer-Setup.exe)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🐧 Instalação no Linux
 
-## Laravel Sponsors
+Execute os seguintes comandos no terminal para instalar os pré-requisitos:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Atualizar pacotes
+sudo apt update && sudo apt upgrade -y
+```
 
-### Premium Partners
+# Instalar PHP 8.2
+```bash
+sudo apt install -y php8.2 php8.2-cli php8.2-mbstring php8.2-xml php8.2-bcmath unzip curl
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Instalar Docker
+```bash
+sudo apt install -y docker.io docker-compose
+```
 
-## Contributing
+# Instalar Composer
+```bash
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ⚙️ Setup da Aplicação
 
-## Code of Conduct
+### 1. Clonar o repositório
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/rafaelrotto/prog-paralela-20252.git
+```
 
-## Security Vulnerabilities
+## 2. Acessar a pasta da aplicação
+```bash
+cd prog-paralela-20252
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 3. Copiar o arquivo .env.example para .env
+```bash
+cp .env.example .env
+```
 
-## License
+## 3.1. Instalar as dependencias
+```bash
+composer install --ignore-platform-reqs
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 4. Subir os containers Docker
+```bash
+docker compose up --build -d
+docker-compose up -d
+```
+
+## 5. Instalar dependências e configurar a aplicação
+```bash
+docker exec -it laravel_app composer install
+docker exec -it laravel_app php artisan key:generate
+docker exec -it laravel_app composer require predis/predis
+docker exec -it laravel_app composer require league/flysystem-aws-s3-v3 "^3.0"
+docker exec -it laravel_app php artisan migrate
+docker exec -it laravel_app php artisan db:seed --class=UsersTableSeeder
+```

@@ -15,9 +15,7 @@ class UserService
 
     public function exportCsv(array $data): array
     {
-        dd($this->userRepository->index($data));
-
-        dispatch(new ExportUserCsvJob());
+        dispatch(new ExportUserCsvJob($this->userRepository->index($data)));
 
         return [
             'status' => 200,

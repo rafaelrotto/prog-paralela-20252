@@ -20,9 +20,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response()->json(['data' => $this->userRepository->index($request->all())]);
     }
 
     /**

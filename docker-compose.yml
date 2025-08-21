@@ -49,5 +49,20 @@ services:
     working_dir: /var/www/html
     command: php artisan queue:work --verbose --tries=3 --timeout=90
 
+  reverb:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: laravel_reverb
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - redis
+      - mysql
+    working_dir: /var/www/html
+    command: php artisan reverb:start --host=0.0.0.0 --port=8085
+    ports:
+      - "8085:8085"
+
 volumes:
   mysql_data:

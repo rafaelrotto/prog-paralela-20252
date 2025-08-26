@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste Broadcast Reverb</title>
+  <!-- Cliente Pusher (Reverb usa esse protocolo) -->
+  <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.4.0/dist/web/pusher.min.js"></script>
+  <script>
+    // Deixa o Pusher disponível globalmente e liga logs no console
+    window.Pusher = Pusher;
+    Pusher.logToConsole = true;
+  </script>
+  <!-- Build IIFE do Laravel Echo 1.16+ (necessário para 'reverb') -->
+  <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
+</head>
+
+<body>
+  <div style="align-items: center; justify-content: center;">
+    <div style="display: flex;">
+      <h1>Usuários</h1>
+    </div>
+    <div style="display: block; flex-direction: column;">
+      <input type="text" id="search" name="serach" placeholder="Nome ou email do usuário" />
+      <select name="status" id="status">
+        <option value="active">Ativo</option>
+        <option value="inactive">Inativo</option>
+      </select>
+      <select name="perPage" id="perPage">
+        <option value="0">All</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <button id="searchButton">buscar</button>
+      <button id="exportButton">exportar csv</button>
+    </div>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="users">
+        <!-- Usuários serão carregados aqui -->
+      </tbody>
+    </table>
+  </div>
+  <div id="output"></div>
+
+  <script>
+    // Se estiver abrindo esse arquivo como file://, prefira '127.0.0.1'
+    const HOST = 'localhost'; // ou "127.0.0.1"
+
+    // A classe Echo está no global via IIFE
+    const EchoClass = window.Echo;
+
+    // Instancia o Echo com o broadcaster 'reverb'
+    window.Echo = new EchoClass({
+      broadcaster: 'reverb',
+      key: 'tbrxeq957o8y0j43a9fe',
+      wsHost: HOST,
+      wsPort: 8085,
+      wssPort: 8085,
+      forceTLS: false,
+      enabledTransports: ['ws', 'wss'],
+    });
+
+    // Logs úteis do estado da conexão
+    window.Echo.connector.pusher.connection.bind('state_change', (states) => {
+      console.log('WS state change:', states);
+    });
+    window.Echo.connector.pusher.connection.bind('connected', () => {
+      console.log('WS connected ✅');
+    });
+    window.Echo.connector.pusher.connection.bind('error', (err) => {
+      console.error('WS error ❌', err);
+    });
+
+    // Escutar o canal público
+    window.Echo.channel('user.csv')
+      .listen('.user.csv.created', (e) => {
+        console.log("Evento recebido:", e);
+        document.getElementById('output').innerHTML =
+          `<p>Arquivo CSV criado: <a href="${e.url}" target="_blank">${e.url}</a></p>`;
+      });
+
+    async function loadUsers() {
+      try {
+        let url = "http://localhost:8010/users";
+
+        let search = document.getElementById("search").value;
+        let status = document.getElementById("status").value;
+        let perPage = document.getElementById("perPage").value;
+
+        url += `?search=${search}&status=${status}&perPage=${perPage}`;
+
+        const res = await fetch(url);
+        const usersJson = await res.json();
+
+        const users = usersJson.data;
+
+        const list = document.getElementById("users");
+
+        list.innerHTML = "";
+        users.forEach(u => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+            <td>${u.status}</td>
+          `;
+          list.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Erro ao carregar usuários", err);
+      }
+    }
+
+    async function exportUsers() {
+      try {
+        let url = "http://localhost:8010/users/export/csv";
+
+        let search = document.getElementById("search").value;
+        let status = document.getElementById("status").value;
+        let perPage = document.getElementById("perPage").value;
+
+        url += `?search=${search}&status=${status}&perPage=${perPage}`;
+
+        await fetch(url);
+      } catch (err) {
+        console.error("Erro ao exportar usuários", err);
+      }
+    }
+
+    document.getElementById('searchButton').addEventListener('click', loadUsers);
+    document.getElementById('exportButton').addEventListener('click', exportUsers);
+  </script>
+</body>
+
+</html>

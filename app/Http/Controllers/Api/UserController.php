@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\UserRepository;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Services\UserService;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +12,6 @@ class UserController extends Controller
 {
     public function __construct(
         private readonly UserService $userService,
-        private readonly UserRepository $userRepository
     ) {}
 
     /**
@@ -22,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(['data' => $this->userRepository->index($request->all())]);
+        return response()->json(['data' => $this->userService->index($request->all())]);
     }
 
     /**
@@ -30,11 +27,9 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request): JsonResponse
     {
-        $user = $this->userRepository->store($request->validated());
-
         return response()->json([
             'message' => 'Usuário criado com sucesso.',
-            'data' => $user
+            'data' => $this->userService->store($request->validated())
         ], 201);
     }
 
@@ -43,7 +38,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return response()->json(['data' => $this->userService->show($id)]);
     }
     
     /**
@@ -59,7 +54,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->userService->destroy($id);
+
+        return response()->noContent();
     }
 
     public function exportCsv(Request $request)

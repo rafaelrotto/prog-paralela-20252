@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        //$schedule->command('name')->monthlyOn(1, '00:00');
+        $schedule->command('app:check-user-status')->everySecond();
     }
 
     /**

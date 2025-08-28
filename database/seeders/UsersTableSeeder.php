@@ -13,6 +13,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(50000)->create();
+        User::factory()->count(1000)->create(['status' => 'active']);
     }
 }

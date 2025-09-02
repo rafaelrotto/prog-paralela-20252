@@ -26,6 +26,6 @@ class CheckUserStatus extends Command
      */
     public function handle()
     {
-        User::query()->where('status', 'inactive')->count();
+        User::query()->where('status', 'inactive')->delete();
     }
 }

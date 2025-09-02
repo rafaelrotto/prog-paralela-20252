@@ -57,4 +57,9 @@ class UserRepository
     {
         $this->find($id)->delete();
     }
+
+    public function findByEmail(string $email)
+    {
+        return $this->model->where('email', $email)->first();
+    }
 }

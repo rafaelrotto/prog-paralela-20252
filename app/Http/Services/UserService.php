@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\UserRepository;
 use App\Jobs\ExportUserCsvJob;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
@@ -44,6 +45,22 @@ class UserService
         return [
             'status' => 200,
             'message' => 'Exportando dados para o csv'
+        ];
+    }
+
+    public function login(array $data)
+    {
+        $user = $this->userRepository->findByEmail($data['email']);
+
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+            abort(403, 'Erro ao fazer login. Tente novamente!');
+        }
+
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'token' => $user->createToken('auth_token')->plainTextToken
         ];
     }
 }

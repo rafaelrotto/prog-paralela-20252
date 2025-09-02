@@ -18,7 +18,10 @@ Route::delete('/users/{id}', [UserController::class, 'destroy']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 */
 
-Route::apiResource('/users', UserController::class);
+Route::post('/login', [UserController::class, 'login']);
 
+Route::middleware(['auth:sanctum', 'user.type:admin'])->group(function () {
+    Route::apiResource('/users', UserController::class);
 
-Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
+    Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
+});

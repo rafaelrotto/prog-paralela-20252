@@ -66,4 +66,14 @@ class UserController extends Controller
 
         return response()->json(['message' => $response['message']], $response['status']);
     }
+
+    public function login(Request $request)
+    {
+        $user = $this->userService->login($request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]));
+
+        return response()->json(['data' => $user]);
+    }
 }

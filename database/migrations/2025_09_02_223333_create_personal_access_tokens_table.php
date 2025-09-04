@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /*
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->morphs('tokenable');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamps();
         });
+        */
     }
 
     /**

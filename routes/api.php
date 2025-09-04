@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\UserController;
 use App\Jobs\TesteFila;
 use App\Models\User;
@@ -22,6 +23,7 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'user.type:admin'])->group(function () {
     Route::apiResource('/users', UserController::class);
+    Route::apiResource('/companies', CompanyController::class);
 
     Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
 });

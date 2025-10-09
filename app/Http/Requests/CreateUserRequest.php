@@ -11,6 +11,10 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if (auth()->user()->type != 'admin' && $this->input('type') == 'admin') {
+            return false;
+        }
+
         return true;
     }
 
@@ -28,6 +32,7 @@ class CreateUserRequest extends FormRequest
                 'required',
                 'in:active,inactive'
             ],
+            'type' => 'required|in:admin,manager,teacher,student',
             'password' => 'required|min:8|max:50|string',
             'password_confirmation' => 'required|same:password'
         ];
@@ -45,6 +50,8 @@ class CreateUserRequest extends FormRequest
             'email.string' => 'O campo email deve ser uma string.',
             'status.required' => 'O campo status é obrigatório.',
             'status.in' => 'O campo status deve ser "active" ou "inactive".',
+            'type.required' => 'O campo tipo é obrigatório.',
+            'type.in' => 'O campo tipo deve ser "admin", "manager", "teacher" ou "student".',
             'password.required' => 'O campo senha é obrigatório.',
             'password.min' => 'O campo senha deve ter no mínimo :min caracteres.',
             'password.max' => 'O campo senha deve ter no máximo :max caracteres.',

@@ -13,11 +13,11 @@ class CheckUserType
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $type): Response
+    public function handle(Request $request, Closure $next, string ...$types): Response
     {
         $user = $request->user();
 
-        if (!$user || $user->type !== $type) {
+        if (!$user || !in_array($user->type, $types)) {
             return response()->json(['message' => 'Acesso negado!'], 403);
         }
 

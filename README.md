@@ -89,3 +89,41 @@ docker exec -it laravel_app php artisan install:broadcasting
 docker exec -it laravel_app php artisan migrate
 docker exec -it laravel_app php artisan db:seed --class=UsersTableSeeder
 ```
+
+### Comandos úteis
+
+## Criar model com migration
+
+```bash
+php artisan make:model NomeDaModel --migration
+```
+
+## Criar Controller na pasta App/Http/Controllers/Api no padrão resource
+
+```bash
+php artisan make:controller Api/NomeDoController --resource
+```
+
+## Criar Request
+
+```bash
+php artisan make:request NomeDaRequest
+```
+
+## Criar Middleware
+
+```bash
+php artisan make:middleware NomeDoMiddleware
+```
+
+## Criar Job
+
+```bash
+php artisan make:job NomeDoJob
+```
+
+## Criar Evento
+
+```bash
+php artisan make:event NomeDoEvent
+```

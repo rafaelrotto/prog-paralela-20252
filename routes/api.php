@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\UserController;
 use App\Jobs\TesteFila;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/teste-fila', function () {
@@ -20,8 +20,25 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 
 Route::post('/login', [UserController::class, 'login']);
 
-Route::middleware(['auth:sanctum', 'user.type:admin'])->group(function () {
-    Route::apiResource('/users', UserController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['user.type:admin'])->group(function () {
+        Route::apiResource('/companies', CompanyController::class);
+    });
 
-    Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
+    Route::middleware(['user.type:manager,admin'])->group(function () {
+        Route::apiResource('/users', UserController::class);
+        Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
+    });
+
+    Route::middleware(['user.type:teacher, student'])->group(function () {
+        //;
+    });
+
+    Route::middleware(['user.type:teacher'])->group(function () {
+        //
+    });
+
+    Route::middleware(['user.type:student'])->group(function () {
+        //
+    });
 });

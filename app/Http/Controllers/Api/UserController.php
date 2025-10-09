@@ -28,9 +28,13 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request): JsonResponse
     {
+        $data = $request->validated();
+
+        $data['company_id'] = auth()->user()->company_id;
+
         return response()->json([
             'message' => 'Usuário criado com sucesso.',
-            'data' => $this->userService->store($request->validated())
+            'data' => $this->userService->store($data)
         ], 201);
     }
 
@@ -39,7 +43,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(['data' => $this->userService->show($id)]);
+        return response()->json(['data' => $this->userService->find($id)]);
     }
     
     /**

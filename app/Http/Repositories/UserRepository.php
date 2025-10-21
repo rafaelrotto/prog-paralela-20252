@@ -13,6 +13,10 @@ class UserRepository extends BaseRepository
 
     public function builder()
     {
+        if (!auth()?->user()) {
+            return $this->model->newQuery();
+        }
+
         return auth()->user()->type === 'admin'
             ? $this->model->newQuery()
             : $this->model->where('company_id', auth()->user()->company_id);

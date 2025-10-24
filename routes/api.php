@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\DisciplineController;
+use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\UserController;
 use App\Jobs\TesteFila;
 use Illuminate\Support\Facades\Route;
@@ -34,8 +36,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         //;
     });
 
-    Route::middleware(['user.type:teacher'])->group(function () {
-        //
+    Route::middleware(['user.type:teacher'])->group(function () {});
+
+    Route::middleware(['user.type:admin,teacher'])->group(function () {
+        Route::apiResource('/quizzes', QuizController::class);
+        Route::apiResource('/disciplines', DisciplineController::class);
     });
 
     Route::middleware(['user.type:student'])->group(function () {

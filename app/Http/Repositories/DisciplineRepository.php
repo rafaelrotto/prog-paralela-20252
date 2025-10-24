@@ -15,15 +15,16 @@ class DisciplineRepository extends BaseRepository
 
     public function index(array $data)
     {
-        $query = $this->model->where(function ($query) use ($data) {
-            if (isset($data['search'])) {
-                $query->where('name', 'like', '%' . $data['search'] . '%');
-            }
-            if (isset($data['company_id'])) {
-                $query->where('company_id', $data['company_id']);
-            }
-        });
+        $userCompanyId = auth()->user()->company_id; // Pega o company_id do usuário autenticado
 
-        return isset($data['per_page']) ? $query->paginate($data['per_page']) : $query->get();
+        $query = $this->model->where('company_id', $userCompanyId); // Filtra sempre pela empresa do usuário
+
+        if (isset($data['search'])) {
+            $query->where('name', 'like', '%' . $data['search'] . '%');
+        }
+
+        return isset($data['per_page'])
+            ? $query->paginate($data['per_page'])
+            : $query->get();
     }
 }

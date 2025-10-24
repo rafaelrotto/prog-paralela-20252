@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DisciplineResource;
+use App\Http\Resources\DisciplineResourceAlt;
 use App\Http\Services\DisciplineService;
+use App\Models\Discipline;
 use Illuminate\Http\Request;
 
 class DisciplineController extends Controller
@@ -12,25 +15,26 @@ class DisciplineController extends Controller
 
     public function index(Request $request)
     {
-        return $this->disciplineService->index($request->all());
+        return DisciplineResourceAlt::collection($this->disciplineService->index($request->all()));
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
         $data['company_id'] = auth()->user()->company_id;
+        $data['user_id'] = auth()->user()->id;
 
         return $this->disciplineService->store($data);
     }
 
     public function show(string $id)
     {
-        return $this->disciplineService->show($id);
+        return new DisciplineResource($this->disciplineService->show($id));
     }
 
     public function update(Request $request, string $id)
     {
-        return $this->disciplineService->update($request->all(), $id);
+        return new $this->disciplineService->update($request->all(), $id);
     }
 
     public function destroy(string $id)

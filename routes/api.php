@@ -21,9 +21,6 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 */
 
 Route::post('/login', [UserController::class, 'login']);
-Route::apiResource('/quizzes', QuizController::class);
-Route::apiResource('/users', UserController::class);
-Route::apiResource('/disciplines', DisciplineController::class);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['user.type:admin'])->group(function () {
@@ -31,6 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::middleware(['user.type:manager,admin'])->group(function () {
+        Route::apiResource('/users', UserController::class);
         Route::get('/users/export/csv', [UserController::class, 'exportCsv']);
     });
 
@@ -40,7 +38,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::middleware(['user.type:teacher'])->group(function () {});
 
-    Route::middleware(['user.type:admin, teacher'])->group(function () {});
+    Route::middleware(['user.type:admin,teacher'])->group(function () {
+        Route::apiResource('/quizzes', QuizController::class);
+        Route::apiResource('/disciplines', DisciplineController::class);
+    });
 
     Route::middleware(['user.type:student'])->group(function () {
         //
